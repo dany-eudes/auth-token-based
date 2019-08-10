@@ -1,12 +1,12 @@
 import { axiosInstance } from 'boot/axios'
 import { Cookies } from 'quasar'
 
-const REGISTER_ROUTE = '/auth/register'
-const VERIFICATION_ROUTE = '/auth/verify'
-const LOGIN_ROUTE = '/auth/login'
-const FETCH_USER_ROUTE = '/auth/user'
-const PASSWORD_FORGOT_ROUTE = '/auth/password/forgot'
-const PASSWORD_RESET_ROUTE = '/auth/password/reset'
+const REGISTER_ROUTE = '<%= prompts.register_route %>'
+const VERIFICATION_ROUTE = '<%= prompts.verification_route %>'
+const LOGIN_ROUTE = '<%= prompts.login_route %>'
+const FETCH_USER_ROUTE = '<%= prompts.fetch_user_route %>'
+const PASSWORD_FORGOT_ROUTE = '<%= prompts.password_forgot_route %>'
+const PASSWORD_RESET_ROUTE = '<%= prompts.password_reset_route %>'
 
 export function register (state, data) {
   return axiosInstance.post(REGISTER_ROUTE, data)
