@@ -38,25 +38,14 @@ export function setToken (state, data) {
   }
 }
 
-export function fetch (state) {
-  var token = Cookies.get('authorization_token')
+export async function fetch(state) {
+  var token = Cookies.get("authorization_token")
   if (token) {
-    axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token
-    return axiosInstance.get(FETCH_USER_ROUTE).then((response) => {
-      state.commit('setUser', response.data.data)
+    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + token
+    return axiosInstance.get(FETCH_USER_ROUTE).then(response => {
+      state.commit("setUser", response.data.data)
     })
   }
-  // if (LocalStorage.has('token')) {
-  //   token = LocalStorage.getItem('token')
-  // } else if (SessionStorage.has('token')) {
-  //   token = SessionStorage.getItem('token')
-  // }
-  // if (token) {
-  //   axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token
-  //   return axiosInstance.get(FETCH_USER_ROUTE).then((response) => {
-  //     state.commit('setUser', response.data.data)
-  //   })
-  // }
 }
 
 export function logout (state) {

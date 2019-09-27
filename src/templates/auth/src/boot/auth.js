@@ -43,11 +43,16 @@ export default ({ app, router, store, Vue }) => {
   router.beforeEach((to, from, next) => {
     const record = to.matched.find(record => record.meta.auth)
     if (record) {
-      if (!store.getters['auth/loggedIn']) {
-        router.push('/')
-      } else if (isArrayOrString(record.meta.auth) && !store.getters['auth/check'](record.meta.auth)) {
-        router.push('/account')
-      }
+      store.dispatch('auth/fetch').then(() => {
+        if (!store.getters['auth/loggedIn']) {
+          router.push('/')
+        } else if (
+          isArrayOrString(record.meta.auth) &&
+          !store.getters['auth/check'](record.meta.auth)
+        ) {
+          router.push('/account')
+        }
+      })
     }
     next()
   })
