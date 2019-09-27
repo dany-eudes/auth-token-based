@@ -12,17 +12,17 @@
 <script>
 export default {
   name: 'Verification',
-  data () {
+  data() {
     return {
       token: '',
       message: ''
     }
   },
-  mounted () {
+  mounted() {
     this.verifyUser()
   },
   methods: {
-    verifyUser () {
+    verifyUser() {
       this.token = this.$route.query.token
 
       this.$auth.verify(this.token).then((response) => {

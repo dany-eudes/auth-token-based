@@ -75,7 +75,7 @@ const minPasswordLength = 8
 
 export default {
   name: 'Register',
-  data () {
+  data() {
     return {
       data: {
         name: '',
@@ -88,7 +88,7 @@ export default {
     }
   },
   methods: {
-    register () {
+    register() {
       this.$v.data.$touch()
       if (!this.$v.data.$error) {
         this.$q.dialog({

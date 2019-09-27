@@ -1,12 +1,12 @@
-export function user (state) {
+export function user(state) {
   return state.user
 }
 
-export function loggedIn (state) {
-  return (state.user !== null)
+export function loggedIn(state) {
+  return state.user !== null
 }
 
-export const check = state => (roles) => {
+export const check = state => roles => {
   const user = state.user
   if (user) {
     if (Array.isArray(roles) && roles.length) {

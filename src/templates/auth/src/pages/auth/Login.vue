@@ -56,7 +56,7 @@ import { email, required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'Login',
-  data () {
+  data() {
     return {
       data: {
         body: {
@@ -69,7 +69,7 @@ export default {
     }
   },
   methods: {
-    login () {
+    login() {
       this.$v.data.$touch()
       if (!this.$v.data.$error) {
         this.loading = true

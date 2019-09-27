@@ -1,5 +1,8 @@
 <template>
-  <q-page padding class="flex justify-center">
+  <q-page
+    padding
+    class="flex justify-center"
+  >
     <q-table
       title="Users"
       class="min-width q-ma-sm"
@@ -13,64 +16,89 @@
       @request="onRequest"
       :filter="filter"
     >
-    <template v-slot:top-right>
-      <q-btn icon="search">
-        <q-menu>
-          <q-banner class="q-pa-md">
-            <q-btn class="q-mb-md" round icon="clear" size="sm" @click="resetFilter">
-            </q-btn>
-            <q-input v-for="field in Object.keys(filterFields)" :key="field" dense debounce="300" v-model="filterFields[field]" :label="$t('auth.users.labels.' + field) + '...'" filled>
-            </q-input>
-          </q-banner>
-        </q-menu>
-      </q-btn>
-    </template>
-    <template v-slot:body-cell-button="props">
-      <q-td :props="props">
-        <q-btn
-          icon="edit"
-          size="sm"
-        >
+      <template v-slot:top-right>
+        <q-btn icon="search">
           <q-menu>
-            <q-list>
-              <q-item clickable @click="editUser(props.row._jv.id)" v-close-popup>
-                <q-item-section>
-                  {{ $t('auth.users.edit_label') }}
-                </q-item-section>
-              </q-item>
-              <q-item clickable @click="verifyUser(props.row)" v-close-popup>
-                <q-item-section>
-                  {{ $t('auth.users.verify_label') }}
-                </q-item-section>
-              </q-item>
-            </q-list>
+            <q-banner class="q-pa-md">
+              <q-btn
+                class="q-mb-md"
+                round
+                icon="clear"
+                size="sm"
+                @click="resetFilter"
+              >
+              </q-btn>
+              <q-input
+                v-for="field in Object.keys(filterFields)"
+                :key="field"
+                dense
+                debounce="300"
+                v-model="filterFields[field]"
+                :label="$t('auth.users.labels.' + field) + '...'"
+                filled
+              >
+              </q-input>
+            </q-banner>
           </q-menu>
         </q-btn>
-      </q-td>
-    </template>
-    <template v-slot:body-cell-verified="props">
-      <q-td :props="props">
-        <q-checkbox :value="Boolean(props.row.verified)">
-        </q-checkbox>
-      </q-td>
-    </template>
-  </q-table>
+      </template>
+      <template v-slot:body-cell-button="props">
+        <q-td :props="props">
+          <q-btn
+            icon="edit"
+            size="sm"
+          >
+            <q-menu>
+              <q-list>
+                <q-item
+                  clickable
+                  @click="editUser(props.row._jv.id)"
+                  v-close-popup
+                >
+                  <q-item-section>
+                    {{ $t('auth.users.edit_label') }}
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  @click="verifyUser(props.row)"
+                  v-close-popup
+                >
+                  <q-item-section>
+                    {{ $t('auth.users.verify_label') }}
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-verified="props">
+        <q-td :props="props">
+          <q-checkbox :value="Boolean(props.row.verified)">
+          </q-checkbox>
+        </q-td>
+      </template>
+    </q-table>
 
-      <responsive-modal
-        v-model="editModal.opened"
-        :submitting="editModal.isSubmitting"
-        submit-button="send"
-        @save="submitUser(editModal.data)"
+    <responsive-modal
+      v-model="editModal.opened"
+      :submitting="editModal.isSubmitting"
+      submit-button="send"
+      @save="submitUser(editModal.data)"
     >
       <template slot="title">
         {{ editModal.data.email }}
       </template>
       <template slot="body">
-        <q-input v-model="editModal.data.name" :label="$t('auth.users.labels.name')">
+        <q-input
+          v-model="editModal.data.name"
+          :label="$t('auth.users.labels.name')"
+        >
         </q-input>
       </template>
     </responsive-modal>
-</q-page>
+  </q-page>
 </template>
 
 <style>
@@ -86,7 +114,7 @@ const emptyFilterFields = {
 }
 export default {
   name: 'SuperuserUsers',
-  preFetch ({ store }) {
+  preFetch({ store }) {
     return store.dispatch('jv/get', 'users').then((response) => {
       rowsNumber = response._jv.json.meta.total
     })
@@ -99,7 +127,7 @@ export default {
       return JSON.stringify(this.filterFields)
     }
   },
-  data () {
+  data() {
     return {
       loading: false,
       filterFields: extend(true, this.filterFields, emptyFilterFields),
@@ -129,10 +157,10 @@ export default {
     }
   },
   methods: {
-    resetFilter () {
+    resetFilter() {
       this.filterFields = extend(true, this.filterFields, emptyFilterFields)
     },
-    onRequest (props) {
+    onRequest(props) {
       let { page, rowsPerPage } = props.pagination
 
       this.loading = true
@@ -160,11 +188,11 @@ export default {
         this.loading = false
       })
     },
-    editUser (id) {
+    editUser(id) {
       this.editModal.opened = true
       this.editModal.data = this.$store.getters['jv/get']('user/' + id)
     },
-    submitUser (user) {
+    submitUser(user) {
       this.editModal.isSubmitting = true
       this.$store.dispatch('jv/patch', [user, { url: 'users' }])
         .then((response) => {
@@ -175,7 +203,7 @@ export default {
           this.editModal.isSubmitting = false
         })
     },
-    verifyUser (user) {
+    verifyUser(user) {
       this.$q.dialog({
         title: this.$t('auth.users.verify_label'),
         message: this.$t('users.verify_message', { user: user.email }),

@@ -1,11 +1,11 @@
-import axios from 'axios'
-import qs from 'qs'
+import axios from "axios"
+import qs from "qs"
 
 const axiosInstance = axios.create({
-  paramsSerializer: (params) => {
-    return qs.stringify(params, { arrayFormat: 'repeat' })
+  paramsSerializer: params => {
+    return qs.stringify(params, { arrayFormat: "repeat" })
   },
-  baseURL: 'http://127.0.0.1:3000'
+  baseURL: "http://127.0.0.1:3000"
 })
 
 export default ({ Vue }) => {

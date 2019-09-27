@@ -5,7 +5,7 @@
 <script>
 export default {
   name: 'Logout',
-  mounted () {
+  mounted() {
     this.$q.dialog({
       title: this.$i18n.t('auth.logout.confirm'),
       message: this.$i18n.t('auth.logout.logout_confirmation'),

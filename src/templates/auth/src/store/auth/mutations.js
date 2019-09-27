@@ -1,4 +1,4 @@
-export function setUser (state, data) {
+export function setUser(state, data) {
   if (data) {
     state.user = {
       id: data.id,
