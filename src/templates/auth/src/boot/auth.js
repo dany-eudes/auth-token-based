@@ -2,9 +2,11 @@ import { Notify } from 'quasar'
 import { axiosInstance } from './axios'
 import auth from '../store/auth'
 import enUS from '../i18n/en-us/auth'
+/* eslint-disable no-use-before-define */
 <% if (prompts.superuser_functionality) { %>
 import { jsonapiModule } from 'jsonapi-vuex'
 <% } %>
+/* eslint-enable no-use-before-define */
 function isArrayOrString (variable) {
   if (typeof variable === typeof [] || typeof variable === typeof '') {
     return true

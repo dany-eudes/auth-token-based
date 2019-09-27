@@ -5,28 +5,28 @@
  * API: https://github.com/quasarframework/quasar/blob/master/app/lib/app-extension/IndexAPI.js
  */
 
-module.exports = function(api, ctx) {
+module.exports = function (api, ctx) {
   api.extendQuasarConf(conf => {
-    conf.boot.push("axios.js")
-    conf.boot.push("vuelidate.js")
-    conf.boot.push("auth.js")
+    conf.boot.push('axios.js')
+    conf.boot.push('vuelidate.js')
+    conf.boot.push('auth.js')
 
     const requiredComponents = [
-      "QCard",
-      "QCardSection",
-      "QCardActions",
-      "QInput",
-      "QCheckbox",
-      "QTable",
-      "QTd",
-      "QDialog",
-      "QBanner",
-      "QMenu"
+      'QCard',
+      'QCardSection',
+      'QCardActions',
+      'QInput',
+      'QCheckbox',
+      'QTable',
+      'QTd',
+      'QDialog',
+      'QBanner',
+      'QMenu'
     ]
 
-    const requiredPlugins = ["Notify", "Dialog", "Cookies"]
+    const requiredPlugins = ['Notify', 'Dialog', 'Cookies']
 
-    const requiredDirectives = ["ClosePopup"]
+    const requiredDirectives = ['ClosePopup']
 
     requiredComponents.forEach(component => {
       if (!conf.framework.components.includes(component)) {

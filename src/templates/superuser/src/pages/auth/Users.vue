@@ -114,7 +114,7 @@ const emptyFilterFields = {
 }
 export default {
   name: 'SuperuserUsers',
-  preFetch({ store }) {
+  preFetch ({ store }) {
     return store.dispatch('jv/get', 'users').then((response) => {
       rowsNumber = response._jv.json.meta.total
     })
@@ -127,7 +127,7 @@ export default {
       return JSON.stringify(this.filterFields)
     }
   },
-  data() {
+  data () {
     return {
       loading: false,
       filterFields: extend(true, this.filterFields, emptyFilterFields),
@@ -157,10 +157,10 @@ export default {
     }
   },
   methods: {
-    resetFilter() {
+    resetFilter () {
       this.filterFields = extend(true, this.filterFields, emptyFilterFields)
     },
-    onRequest(props) {
+    onRequest (props) {
       let { page, rowsPerPage } = props.pagination
 
       this.loading = true
@@ -188,11 +188,11 @@ export default {
         this.loading = false
       })
     },
-    editUser(id) {
+    editUser (id) {
       this.editModal.opened = true
       this.editModal.data = this.$store.getters['jv/get']('user/' + id)
     },
-    submitUser(user) {
+    submitUser (user) {
       this.editModal.isSubmitting = true
       this.$store.dispatch('jv/patch', [user, { url: 'users' }])
         .then((response) => {
@@ -203,7 +203,7 @@ export default {
           this.editModal.isSubmitting = false
         })
     },
-    verifyUser(user) {
+    verifyUser (user) {
       this.$q.dialog({
         title: this.$t('auth.users.verify_label'),
         message: this.$t('users.verify_message', { user: user.email }),

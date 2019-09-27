@@ -76,10 +76,10 @@ export default {
     }
   },
   methods: {
-    toggle(value) {
+    toggle (value) {
       this.$emit('input', value)
     },
-    save() {
+    save () {
       this.$emit('save')
     }
   }

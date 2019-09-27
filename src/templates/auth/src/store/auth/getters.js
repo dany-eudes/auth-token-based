@@ -1,8 +1,8 @@
-export function user(state) {
+export function user (state) {
   return state.user
 }
 
-export function loggedIn(state) {
+export function loggedIn (state) {
   return state.user !== null
 }
 

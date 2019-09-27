@@ -6,54 +6,54 @@
  * https://www.npmjs.com/package/inquirer#question
  */
 
-module.exports = function() {
+module.exports = function () {
   return [
     {
-      name: "register_route",
-      type: "input",
+      name: 'register_route',
+      type: 'input',
       required: true,
-      message: "Route for user registration",
-      default: "/auth/register"
+      message: 'Route for user registration',
+      default: '/auth/register'
     },
     {
-      name: "verification_route",
-      type: "input",
+      name: 'verification_route',
+      type: 'input',
       required: true,
-      message: "Route for user verification",
-      default: "/auth/verify"
+      message: 'Route for user verification',
+      default: '/auth/verify'
     },
     {
-      name: "login_route",
-      type: "input",
+      name: 'login_route',
+      type: 'input',
       required: true,
-      message: "Route for user login",
-      default: "/auth/login"
+      message: 'Route for user login',
+      default: '/auth/login'
     },
     {
-      name: "password_forgot_route",
-      type: "input",
+      name: 'password_forgot_route',
+      type: 'input',
       required: true,
-      message: "Route for forgotten password request",
-      default: "/auth/password/forgot"
+      message: 'Route for forgotten password request',
+      default: '/auth/password/forgot'
     },
     {
-      name: "password_reset_route",
-      type: "input",
+      name: 'password_reset_route',
+      type: 'input',
       required: true,
-      message: "Route to reset password",
-      default: "/auth/password/reset"
+      message: 'Route to reset password',
+      default: '/auth/password/reset'
     },
     {
-      name: "fetch_user_route",
-      type: "input",
+      name: 'fetch_user_route',
+      type: 'input',
       required: true,
-      message: "Route to fetch authenticated user",
-      default: "/auth/user"
+      message: 'Route to fetch authenticated user',
+      default: '/auth/user'
     },
     {
-      name: "superuser_functionality",
-      type: "confirm",
-      message: "Add superuser functionality (user management)?",
+      name: 'superuser_functionality',
+      type: 'confirm',
+      message: 'Add superuser functionality (user management)?',
       default: true
     }
   ]
