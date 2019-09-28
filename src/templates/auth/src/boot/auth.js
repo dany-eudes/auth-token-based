@@ -37,7 +37,7 @@ export default ({ app, router, store, Vue }) => {
    */
   store.registerModule('auth', auth)
 <% if (prompts.superuser_functionality) { %>
-  store.registerModule('jv', jsonapiModule(axiosInstance, { preserveJson: true }))
+  store.registerModule('jv', jsonapiModule(axiosInstance))
 <% } %>
   /**
    * Set route guard
