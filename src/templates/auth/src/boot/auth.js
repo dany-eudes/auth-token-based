@@ -54,9 +54,15 @@ export default ({ app, router, store, Vue }) => {
         ) {
           router.push('/account')
         }
+      }).catch(err => {
+        console.error(err)
+        router.push('/')
+      }).finally(() => {
+        next()
       })
+    } else {
+      next()
     }
-    next()
   })
 
   /**

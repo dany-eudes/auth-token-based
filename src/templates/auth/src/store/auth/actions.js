@@ -47,6 +47,9 @@ export function setToken (state, data) {
 }
 
 export async function fetch (state) {
+  if (state.user) {
+    return true
+  }
   var token = Cookies.get('authorization_token')
   if (token) {
     axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token

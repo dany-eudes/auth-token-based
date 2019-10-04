@@ -7,9 +7,13 @@
 
 module.exports = function (api, ctx) {
   api.extendQuasarConf(conf => {
-    conf.boot.push('axios.js')
-    conf.boot.push('vuelidate.js')
-    conf.boot.push('auth.js')
+    let bootFiles = ['axios.js', 'vuelidate.js', 'i18n.js', 'auth.js'] // auth.js needs to be loaded last
+
+    bootFiles.forEach(bootFile => {
+      if (!conf.boot.includes(bootFile)) {
+        conf.boot.push(bootFile)
+      }
+    })
 
     const requiredComponents = [
       'QCard',

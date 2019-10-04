@@ -56,7 +56,7 @@
                   v-close-popup
                 >
                   <q-item-section>
-                    {{ $t('auth.users.edit_label') }}
+                    {{ $t('auth.users.edit') }}
                   </q-item-section>
                 </q-item>
                 <q-item
@@ -65,7 +65,7 @@
                   v-close-popup
                 >
                   <q-item-section>
-                    {{ $t('auth.users.verify_label') }}
+                    {{ $t('auth.users.verify.label') }}
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -205,8 +205,8 @@ export default {
     },
     verifyUser (user) {
       this.$q.dialog({
-        title: this.$t('auth.users.verify_label'),
-        message: this.$t('users.verify_message', { user: user.email }),
+        title: this.$t('auth.users.verify.label'),
+        message: this.$t('auth.users.verify.message', { user: user.email }),
         cancel: true
       }).onOk(data => {
         this.$auth.verify(user.verificationToken).then(() => {

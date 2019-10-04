@@ -3,7 +3,9 @@
 
 export default {
   buttons: {
-    send: 'Send'
+    send: 'Send',
+    submit: 'Submit',
+    save: 'Save'
   },
   auth: {
     network_error: 'Network error. Please check your internet connection',
@@ -94,9 +96,11 @@ export default {
         email: 'Email',
         name: 'Name'
       },
-      edit_label: 'Edit',
-      verify_label: 'Verify',
-      verify_message: 'Are you sure you want to verify {user}?'
+      verify: {
+        label: 'Verify',
+        message: 'Are you sure you want to verify {user}?'
+      },
+      edit: 'Edit'
     }
   }
 }

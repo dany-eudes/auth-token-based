@@ -19,7 +19,7 @@ module.exports = function (api) {
       axios: '^0.18.0',
       vuelidate: '^0.7.4',
       'vue-i18n': '^7.3.3',
-      'jsonapi-vuex': '^1.2.1'
+      'jsonapi-vuex': '^3.1.1'
     }
   })
 
