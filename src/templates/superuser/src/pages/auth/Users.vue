@@ -13,8 +13,8 @@
       :loading="loading"
       :pagination.sync="pagination"
       :rows-per-page-options="[3, 5, 10, 20]"
-      @request="onRequest"
       :filter="filter"
+      @request="onRequest"
     >
       <template v-slot:top-right>
         <q-btn icon="search">
@@ -26,18 +26,16 @@
                 icon="clear"
                 size="sm"
                 @click="resetFilter"
-              >
-              </q-btn>
+              />
               <q-input
                 v-for="field in Object.keys(filterFields)"
                 :key="field"
+                v-model="filterFields[field]"
                 dense
                 debounce="300"
-                v-model="filterFields[field]"
                 :label="$t('auth.users.labels.' + field) + '...'"
                 filled
-              >
-              </q-input>
+              />
             </q-banner>
           </q-menu>
         </q-btn>
@@ -51,18 +49,18 @@
             <q-menu>
               <q-list>
                 <q-item
+                  v-close-popup
                   clickable
                   @click="editUser(props.row._jv.id)"
-                  v-close-popup
                 >
                   <q-item-section>
                     {{ $t('auth.users.edit') }}
                   </q-item-section>
                 </q-item>
                 <q-item
+                  v-close-popup
                   clickable
                   @click="verifyUser(props.row)"
-                  v-close-popup
                 >
                   <q-item-section>
                     {{ $t('auth.users.verify.label') }}
@@ -75,8 +73,7 @@
       </template>
       <template v-slot:body-cell-verified="props">
         <q-td :props="props">
-          <q-checkbox :value="Boolean(props.row.verified)">
-          </q-checkbox>
+          <q-checkbox :value="Boolean(props.row.verified)" />
         </q-td>
       </template>
     </q-table>
@@ -94,8 +91,7 @@
         <q-input
           v-model="editModal.data.name"
           :label="$t('auth.users.labels.name')"
-        >
-        </q-input>
+        />
       </template>
     </responsive-modal>
   </q-page>
@@ -115,17 +111,12 @@ const emptyFilterFields = {
 export default {
   name: 'SuperuserUsers',
   preFetch ({ store }) {
-    return store.dispatch('jv/get', 'users').then((response) => {
+    return store.dispatch('jv/get', 'users').then(response => {
       rowsNumber = response._jv.json.meta.total
     })
   },
   components: {
     responsiveModal
-  },
-  computed: {
-    filter: function () {
-      return JSON.stringify(this.filterFields)
-    }
   },
   data () {
     return {
@@ -140,9 +131,24 @@ export default {
       },
       columns: [
         { name: 'id', align: 'left', label: 'ID', field: row => row._jv.id },
-        { name: 'email', align: 'center', label: 'Email', field: row => row.email },
-        { name: 'name', align: 'center', label: 'Name', field: row => row.name },
-        { name: 'verified', align: 'center', label: 'Verified', field: row => row.verified },
+        {
+          name: 'email',
+          align: 'center',
+          label: 'Email',
+          field: row => row.email
+        },
+        {
+          name: 'name',
+          align: 'center',
+          label: 'Name',
+          field: row => row.name
+        },
+        {
+          name: 'verified',
+          align: 'center',
+          label: 'Verified',
+          field: row => row.verified
+        },
         { name: 'button', align: 'right' }
       ],
       users: this.$store.getters['jv/get']('user'),
@@ -154,6 +160,11 @@ export default {
           name: ''
         }
       }
+    }
+  },
+  computed: {
+    filter () {
+      return JSON.stringify(this.filterFields)
     }
   },
   methods: {
@@ -179,14 +190,15 @@ export default {
           size: rowsPerPage
         }
       }
-      return this.$store.dispatch('jv/get', ['users', { params: params }]).then((response) => {
-        this.pagination.rowsNumber = response._jv.json.meta.total
-        delete response._jv
-        this.users = response
-        this.pagination.page = page
-        this.pagination.rowsPerPage = rowsPerPage
-        this.loading = false
-      })
+      return this.$store
+        .dispatch('jv/get', ['users', { params: params }])
+        .then(response => {
+          this.pagination.rowsNumber = Object.keys(response).length
+          this.users = response
+          this.pagination.page = page
+          this.pagination.rowsPerPage = rowsPerPage
+          this.loading = false
+        })
     },
     editUser (id) {
       this.editModal.opened = true
@@ -194,9 +206,13 @@ export default {
     },
     submitUser (user) {
       this.editModal.isSubmitting = true
-      this.$store.dispatch('jv/patch', [user, { url: 'users' }])
-        .then((response) => {
-          this.users[response._jv.id] = { ...this.users[response._jv.id], ...response }
+      this.$store
+        .dispatch('jv/patch', [user, { url: 'users' }])
+        .then(response => {
+          this.users[response._jv.id] = {
+            ...this.users[response._jv.id],
+            ...response
+          }
           this.editModal.opened = false
         })
         .finally(() => {
@@ -204,15 +220,17 @@ export default {
         })
     },
     verifyUser (user) {
-      this.$q.dialog({
-        title: this.$t('auth.users.verify.label'),
-        message: this.$t('auth.users.verify.message', { user: user.email }),
-        cancel: true
-      }).onOk(data => {
-        this.$auth.verify(user.verificationToken).then(() => {
-          user.verified = 1
+      this.$q
+        .dialog({
+          title: this.$t('auth.users.verify.label'),
+          message: this.$t('auth.users.verify.message', { user: user.email }),
+          cancel: true
         })
-      })
+        .onOk(data => {
+          this.$auth.verify(user.verificationToken).then(() => {
+            user.verified = 1
+          })
+        })
     }
   }
 }

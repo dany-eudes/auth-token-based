@@ -9,12 +9,6 @@ module.exports = function (api, ctx) {
   api.extendQuasarConf(conf => {
     let bootFiles = ['axios.js', 'vuelidate.js', 'i18n.js', 'auth.js'] // auth.js needs to be loaded last
 
-    bootFiles.forEach(bootFile => {
-      if (!conf.boot.includes(bootFile)) {
-        conf.boot.push(bootFile)
-      }
-    })
-
     const requiredComponents = [
       'QCard',
       'QCardSection',
@@ -25,12 +19,19 @@ module.exports = function (api, ctx) {
       'QTd',
       'QDialog',
       'QBanner',
-      'QMenu'
+      'QMenu',
+      'QForm'
     ]
 
     const requiredPlugins = ['Notify', 'Dialog', 'Cookies']
 
     const requiredDirectives = ['ClosePopup']
+
+    bootFiles.forEach(bootFile => {
+      if (!conf.boot.includes(bootFile)) {
+        conf.boot.push(bootFile)
+      }
+    })
 
     requiredComponents.forEach(component => {
       if (!conf.framework.components.includes(component)) {

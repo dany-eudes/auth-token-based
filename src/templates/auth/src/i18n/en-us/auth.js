@@ -29,12 +29,6 @@ export default {
       remember_me: 'Remember me',
       repeat_password: 'Repeat password'
     },
-    errors: {
-      password_length:
-        'The minimum length of the password is {length} characters.',
-      password_match: 'Passwords do not match.',
-      email: 'A valid email address is required'
-    },
     login: {
       login: 'Login',
       password_forgot: 'Forgot your password?',
@@ -57,11 +51,6 @@ export default {
       name: '@:auth.labels.name',
       password: '@:auth.labels.password',
       repeat_password: '@:auth.labels.repeat_password',
-      errors: {
-        password_length: '@:auth.errors.password_length',
-        password_match: '@:auth.errors.password_match',
-        email: '@:auth.errors.email'
-      },
       check_email:
         'You want to register with the email address {email}, is this correct?'
     },
@@ -85,10 +74,6 @@ export default {
         header: 'Reset your password',
         success:
           'Your password has been reset. You can now login with the new password.'
-      },
-      errors: {
-        password_length: '@:auth.errors.password_length',
-        password_match: '@:auth.errors.password_match'
       }
     },
     users: {
@@ -101,6 +86,12 @@ export default {
         message: 'Are you sure you want to verify {user}?'
       },
       edit: 'Edit'
+    },
+    validations: {
+      required: 'Field is required.',
+      password_length: 'The minimum length of the password is {length} characters.',
+      password_match: 'Passwords do not match.',
+      email: 'A valid email address is required.'
     }
   }
 }
