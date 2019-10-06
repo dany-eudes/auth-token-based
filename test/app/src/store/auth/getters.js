@@ -3,10 +3,10 @@ export function user (state) {
 }
 
 export function loggedIn (state) {
-  return (state.user !== null)
+  return state.user !== null
 }
 
-export const check = state => (roles) => {
+export const check = state => roles => {
   const user = state.user
   if (user) {
     if (Array.isArray(roles) && roles.length) {

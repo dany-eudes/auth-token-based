@@ -14,21 +14,29 @@ export function register (state, data) {
 
 export function login (state, data) {
   const p = new Promise(function (resolve, reject) {
-    return axiosInstance.post(LOGIN_ROUTE, data.body).then((response) => {
-      state.commit('setUser', response.data.user.data)
-      const token = response.data.token
-      axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token
-      state.dispatch('setToken', { token: token, rememberMe: data.rememberMe })
-      resolve()
-    }).catch((error) => {
-      reject(error)
-    })
+    return axiosInstance
+      .post(LOGIN_ROUTE, data.body)
+      .then(response => {
+        state.commit('setUser', response.data.user.data)
+        const token = response.data.token
+        axiosInstance.defaults.headers.common['Authorization'] =
+          'Bearer ' + token
+        state.dispatch('setToken', {
+          token: token,
+          rememberMe: data.rememberMe
+        })
+        resolve()
+      })
+      .catch(error => {
+        reject(error)
+      })
   })
   return p
 }
 
 export function setToken (state, data) {
-  axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + data.token
+  axiosInstance.defaults.headers.common['Authorization'] =
+    'Bearer ' + data.token
   if (data.rememberMe) {
     Cookies.set('authorization_token', data.token, {
       expires: 365
@@ -38,33 +46,20 @@ export function setToken (state, data) {
   }
 }
 
-export function fetch (state) {
+export async function fetch (state) {
+  if (state.user) {
+    return true
+  }
   var token = Cookies.get('authorization_token')
   if (token) {
     axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token
-    return axiosInstance.get(FETCH_USER_ROUTE).then((response) => {
+    return axiosInstance.get(FETCH_USER_ROUTE).then(response => {
       state.commit('setUser', response.data.data)
     })
   }
-  // if (LocalStorage.has('token')) {
-  //   token = LocalStorage.getItem('token')
-  // } else if (SessionStorage.has('token')) {
-  //   token = SessionStorage.getItem('token')
-  // }
-  // if (token) {
-  //   axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token
-  //   return axiosInstance.get(FETCH_USER_ROUTE).then((response) => {
-  //     state.commit('setUser', response.data.data)
-  //   })
-  // }
 }
 
 export function logout (state) {
-  // if (LocalStorage.has('token')) {
-  //   LocalStorage.remove('token')
-  // } else if (SessionStorage.has('token')) {
-  //   SessionStorage.remove('token')
-  // }
   Cookies.remove('authorization_token')
   state.commit('setUser', null)
 }

@@ -6,6 +6,9 @@
         size="3rem"
         class="q-mt-lg"
       />
+      <div v-if="$auth.user()">
+        {{ $auth.user().email }}
+      </div>
     </div>
     <q-list
       no-border

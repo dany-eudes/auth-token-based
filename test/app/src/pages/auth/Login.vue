@@ -10,40 +10,43 @@
         </div>
       </q-card-section>
 
-      <q-card-section>
-        <q-input
-          id="email"
-          v-model.trim="data.body.email"
-          type="email"
-          :label="this.$t('auth.login.email')"
-          :error="this.$v.data.body.email.$error"
-          required
-          autofocus
-        />
-        <q-input
-          id="password"
-          v-model="data.body.password"
-          type="password"
-          :label="this.$t('auth.login.password')"
-          :error="$v.data.body.password.$error"
-          required
-          @keyup.enter="login"
-        /><br>
-        <q-checkbox
-          id="rememberMe"
-          v-model="data.rememberMe"
-          :label="this.$t('auth.login.remember_me')"
-        />
-      </q-card-section>
-      <q-card-actions>
-        <q-btn
-          color="primary"
-          :loading="loading"
-          @click="login"
-        >
-          {{ $t('auth.login.login') }}
-        </q-btn>
-      </q-card-actions>
+      <q-form
+        class="q-gutter-md"
+        @submit="onSubmit"
+      >
+        <q-card-section>
+          <q-input
+            id="email"
+            v-model.trim="data.body.email"
+            type="email"
+            :label="this.$t('auth.login.email')"
+            :rules="validations['email']"
+            lazy-rules
+            autofocus
+          />
+          <q-input
+            id="password"
+            v-model="data.body.password"
+            type="password"
+            :label="this.$t('auth.login.password')"
+            :rules="validations['password']"
+            lazy-rules
+          /><br>
+          <q-checkbox
+            id="rememberMe"
+            v-model="data.rememberMe"
+            :label="this.$t('auth.login.remember_me')"
+          />
+        </q-card-section>
+        <q-card-actions>
+          <q-btn
+            :label="$t('auth.login.login')"
+            color="primary"
+            :loading="loading"
+            type="submit"
+          />
+        </q-card-actions>
+      </q-form>
       <router-link to="/password/forgot">
         <a>{{ this.$t('auth.login.password_forgot') }}</a>
       </router-link>
@@ -52,7 +55,7 @@
 </template>
 
 <script>
-import { email, required } from 'vuelidate/lib/validators'
+import isEmail from 'validator/lib/isEmail'
 
 export default {
   name: 'Login',
@@ -65,17 +68,25 @@ export default {
         },
         rememberMe: false
       },
-      loading: false
+      loading: false,
+      validations: {
+        email: [
+          val => !!val || this.$t('auth.validations.required'),
+          val => isEmail(val) || this.$t('auth.validations.email')
+        ],
+        password: [val => !!val || this.$t('auth.validations.required')]
+      }
     }
   },
   methods: {
-    login () {
-      this.$v.data.$touch()
-      if (!this.$v.data.$error) {
-        this.loading = true
-        this.$auth.login(this.data).then((response) => {
+    onSubmit () {
+      this.loading = true
+      this.$auth
+        .login(this.data)
+        .then(response => {
           this.$router.push('/account')
-        }).catch((error) => {
+        })
+        .catch(error => {
           if (error.response) {
             if (error.response.status === 401) {
               this.$q.dialog({
@@ -89,23 +100,10 @@ export default {
               console.error(error)
             }
           }
-        }).finally(() => {
+        })
+        .finally(() => {
           this.loading = false
         })
-      }
-    }
-  },
-  validations: {
-    data: {
-      body: {
-        email: {
-          required,
-          email
-        },
-        password: {
-          required
-        }
-      }
     }
   }
 }

@@ -2,9 +2,11 @@ import { Notify } from 'quasar'
 import { axiosInstance } from './axios'
 import auth from '../store/auth'
 import enUS from '../i18n/en-us/auth'
+/* eslint-disable no-use-before-define */
 
 import { jsonapiModule } from 'jsonapi-vuex'
 
+/* eslint-enable no-use-before-define */
 function isArrayOrString (variable) {
   if (typeof variable === typeof [] || typeof variable === typeof '') {
     return true
@@ -35,7 +37,7 @@ export default ({ app, router, store, Vue }) => {
    */
   store.registerModule('auth', auth)
 
-  store.registerModule('jv', jsonapiModule(axiosInstance, { preserveJson: true }))
+  store.registerModule('jv', jsonapiModule(axiosInstance))
 
   /**
    * Set route guard
@@ -43,13 +45,24 @@ export default ({ app, router, store, Vue }) => {
   router.beforeEach((to, from, next) => {
     const record = to.matched.find(record => record.meta.auth)
     if (record) {
-      if (!store.getters['auth/loggedIn']) {
+      store.dispatch('auth/fetch').then(() => {
+        if (!store.getters['auth/loggedIn']) {
+          router.push('/')
+        } else if (
+          isArrayOrString(record.meta.auth) &&
+          !store.getters['auth/check'](record.meta.auth)
+        ) {
+          router.push('/account')
+        }
+      }).catch(err => {
+        console.error(err)
         router.push('/')
-      } else if (isArrayOrString(record.meta.auth) && !store.getters['auth/check'](record.meta.auth)) {
-        router.push('/account')
-      }
+      }).finally(() => {
+        next()
+      })
+    } else {
+      next()
     }
-    next()
   })
 
   /**

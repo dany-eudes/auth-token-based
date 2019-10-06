@@ -10,33 +10,36 @@
         </div>
       </q-card-section>
 
-      <q-card-section>
-        <q-input
-          id="email"
-          v-model.trim="data.email"
-          type="text"
-          :label="$t('auth.password.forgot.email')"
-          required
-          autofocus
-          :error="$v.data.email.$error"
-        />
-      </q-card-section>
-      <q-card-actions>
-        <q-btn
-          class="fit"
-          color="primary"
-          :loading="loading"
-          @click="submit"
-        >
-          {{ $t('auth.submit') }}
-        </q-btn>
-      </q-card-actions>
+      <q-form
+        class="q-gutter-md"
+        @submit="onSubmit"
+      >
+        <q-card-section>
+          <q-input
+            id="email"
+            v-model.trim="data.email"
+            type="text"
+            :label="$t('auth.password.forgot.email')"
+            :rules="validations['email']"
+            lazy-rules
+            autofocus
+          />
+        </q-card-section>
+        <q-card-actions>
+          <q-btn
+            :label="$t('auth.submit')"
+            color="primary"
+            :loading="loading"
+            type="submit"
+          />
+        </q-card-actions>
+      </q-form>
     </q-card>
   </q-page>
 </template>
 
 <script>
-import { email, required } from 'vuelidate/lib/validators'
+import isEmail from 'validator/lib/isEmail'
 
 export default {
   name: 'PasswordForgot',
@@ -45,7 +48,13 @@ export default {
       data: {
         email: ''
       },
-      loading: false
+      loading: false,
+      validations: {
+        email: [
+          val => !!val || this.$t('auth.validations.required'),
+          val => isEmail(val) || this.$t('auth.validations.email')
+        ]
+      }
     }
   },
   mounted () {
@@ -54,30 +63,25 @@ export default {
     }
   },
   methods: {
-    submit () {
-      this.$v.data.$touch()
-      if (!this.$v.data.$error) {
-        this.loading = true
-        this.$auth.passwordForgot(this.data).then((response) => {
-          this.$q.dialog({
-            message: this.$t('auth.password.forgot.check_email')
-          }).onOk(() => {
-            this.$router.push('/login')
-          })
-        }).catch((error) => {
+    onSubmit () {
+      this.loading = true
+      this.$auth
+        .passwordForgot(this.data)
+        .then(response => {
+          this.$q
+            .dialog({
+              message: this.$t('auth.password.forgot.check_email')
+            })
+            .onOk(() => {
+              this.$router.push('/login')
+            })
+        })
+        .catch(error => {
           console.error(error)
-        }).finally(() => {
+        })
+        .finally(() => {
           this.loading = false
         })
-      }
-    }
-  },
-  validations: {
-    data: {
-      email: {
-        required,
-        email
-      }
     }
   }
 }
